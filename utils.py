@@ -22,12 +22,13 @@ def send_confirmation_email(user_email):
         'confirm_email',
         token = confirm_serializer.dumps(user_email, salt='email-confirmation-salt'),
         _external=True)
+    print("url:",confirm_url)
 
     html = render_template(
         'email_confirmation.html',
         confirm_url=confirm_url)
 
-    send_email('Confirm Your Email Address', [user_email], html)
+    # send_email('Confirm Your Email Address', [user_email], html)
 
 def error_response(msg,data = None):
     if data is None:

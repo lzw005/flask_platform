@@ -10,7 +10,7 @@ class Users(db.Model):
     username = db.Column(db.String(250),  unique=True, nullable=False)
     password = db.Column(db.String(250))
     login_time = db.Column(db.Integer)
-
+    email_confirmed = db.Column(db.Boolean)
     def __init__(self, username, password, email):
         self.username = username
         self.password = password
@@ -40,6 +40,11 @@ class Users(db.Model):
     def delete(self, id):
         self.query.filter_by(id=id).delete()
         return session_commit()
+
+    @property
+    def is_email_confirmed(self):
+        """Return True if the user confirmed their email address."""
+        return self.email_confirmed
 
 
 def session_commit():
