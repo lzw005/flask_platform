@@ -48,7 +48,7 @@ class Auth():
         except jwt.ExpiredSignatureError:
             return 'Token过期'
         except jwt.InvalidTokenError:
-            return '无效Token'
+            return '无效Token.'
 
 
     def authenticate(self, username, password):
