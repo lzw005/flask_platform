@@ -47,6 +47,11 @@ app.register_blueprint(teams_blueprint)
 app.register_blueprint(users_blueprint,url_prefix='/users')
 
 
+
+'''
+以下是测试接口
+'''
+
 @app.route('/up', methods = ['POST','GET'])
 def up_photo():
     if request.method =="POST":
@@ -61,13 +66,6 @@ def up_photo():
         return "success"
     else:
         return render_template('image.html')
-
-
-
-
-'''
-以下是测试接口
-'''
 
 
 @app.route('/users/confirm')

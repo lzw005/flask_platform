@@ -14,7 +14,7 @@ class Auth():
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=3),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2),
                 'iat': datetime.datetime.utcnow(),
                 'iss': 'WUSHU ONLINE',
                 'data': {
@@ -61,14 +61,16 @@ class Auth():
         # userInfo = Users.query.filter_by(username=username).first()
         userInfo = Users.query.filter(Users.email == email).first()
         if userInfo:
-            if (Users.check_password(Users, userInfo.password, password)):
-                login_time = int(time.time())
-                userInfo.login_time = login_time
-                Users.update(Users)
-                token = self.encode_auth_token(userInfo.id, login_time)
-                print(self.decode_auth_token(token.decode()))
-                return utils.success_response('登陆成功',{'token':token.decode()})
-            return utils.error_response('用户名或密码不正确', {'email': email})
+            if userInfo.is_email_confirmed:
+                if (Users.check_password(Users, userInfo.password, password)):
+                    login_time = int(time.time())
+                    userInfo.login_time = login_time
+                    Users.update(Users)
+                    token = self.encode_auth_token(userInfo.id, login_time)
+                    print(self.decode_auth_token(token.decode()))
+                    return utils.success_response('登陆成功',{'token':token.decode()})
+                return utils.error_response('用户名或密码不正确', {'email': email})
+            return utils.error_response('请登陆邮箱进行确认')
         else:
             return utils.error_response('用户名或密码不正确', {'email': email})
 
