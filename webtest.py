@@ -65,6 +65,9 @@ def up_photo():
 
 
 
+'''
+以下是测试接口
+'''
 
 
 @app.route('/users/confirm')
@@ -88,11 +91,12 @@ def get():
     :return: json
     """
     response = Auth.identify(Auth, request)
+    print(response)
     if (response['status'] and response['data']):
         user = Users.get(Users, response['data']['id'])
         returnUser = {
             'id': user.id,
-            'username': user.username,
+            'username': user.name,
             'email': user.email,
             'login_time': user.login_time
         }

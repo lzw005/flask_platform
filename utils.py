@@ -10,12 +10,22 @@ def send_async_email(msg):
         mail.send(msg)
 
 def send_email(subject, recipients, html_body):
+    '''
+    :param subject: 标题
+    :param recipients: 收件人
+    :param html_body: 确认网页
+    :return:
+    '''
     msg = Message(subject,recipients=recipients)
     msg.html = html_body
     thr = Thread(target=send_async_email, args=[msg])
     thr.start()
 
 def send_confirmation_email(user_email):
+    '''
+    :param user_email: 收件人
+    :return:
+    '''
     confirm_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
 
     confirm_url = url_for(

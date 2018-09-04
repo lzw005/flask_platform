@@ -15,12 +15,12 @@ def login():
     用户登录
     :return: json
     """
-    username = request.form.get('username')
+    email = request.form.get('username')
     password = request.form.get('password')
-    if not username or not password:
+    if not email or not password:
         return jsonify(utils.error_response("用户名或密码不能为空"))
     else:
-        return jsonify(Auth.authenticate(Auth, username, password))
+        return jsonify(Auth.authenticate(Auth, email, password))
 
 @users.route('/register', methods=['POST'])
 @limiter.limit("100 per hour")
@@ -54,12 +54,17 @@ def register():
         db.session.rollback()
         reason = str(e)
         return utils.error_response(reason)
-    utils.send_confirmation_email(validate_email[1])
-    return jsonify(utils.success_response('注册成功',user.email))
+    utils.send_confirmation_email(validate_email[1])   #发送确认邮件
+    return jsonify(utils.success_response('注册成功，请登陆邮箱确认',user.email))
 
 
 @users.route('/confirm/<token>')
 def confirm_email(token):
+    '''
+    确认邮箱有效
+    :param token:jwt
+    :return: String
+    '''
     try:
         confirm_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)

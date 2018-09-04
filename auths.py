@@ -51,15 +51,15 @@ class Auth():
             return '无效Token'
 
 
-    def authenticate(self, username, password):
+    def authenticate(self, email, password):
         """
         用户登录，登录成功返回token，写将登录时间写入数据库；登录失败返回失败原因
-        :param username:string
+        :param email:string
         :param password:string
         :return: dict
         """
         # userInfo = Users.query.filter_by(username=username).first()
-        userInfo = Users.query.filter(Users.username == username).first()
+        userInfo = Users.query.filter(Users.email == email).first()
         if userInfo:
             if (Users.check_password(Users, userInfo.password, password)):
                 login_time = int(time.time())
@@ -68,9 +68,9 @@ class Auth():
                 token = self.encode_auth_token(userInfo.id, login_time)
                 print(self.decode_auth_token(token.decode()))
                 return utils.success_response('登陆成功',{'token':token.decode()})
-            return utils.error_response('用户名或密码不正确', {'username': username, 'password': password})
+            return utils.error_response('用户名或密码不正确', {'email': email})
         else:
-            return utils.error_response('用户名或密码不正确', {'username': username, 'password': password})
+            return utils.error_response('用户名或密码不正确', {'email': email})
 
 
     def identify(self, request):
