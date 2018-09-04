@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - myblog@106.14.140.30" uuid="1d76e0b8-3780-4161-ac9b-09a25963aee8">
+      <database-info product="MySQL" version="5.7.23-0ubuntu0.16.04.1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>Ubuntu</user-name>
+      <introspection-schemas>*:myblog|myblog:</introspection-schemas>
+      <resolve-scope>myblog:</resolve-scope>
+      <unqualified-resolve-schemas>myblog:</unqualified-resolve-schemas>
+    </data-source>
+    <data-source name="zyh" uuid="3690689d-3ef5-400f-ac9a-d729cc72ed1d">
+      <database-info product="MySQL" version="5.7.23-0ubuntu0.16.04.1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>Ubuntu</user-name>
+      <introspection-schemas>*:test</introspection-schemas>
+    </data-source>
+  </component>
+</project>
