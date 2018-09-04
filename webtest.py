@@ -11,7 +11,6 @@ from models import Users
 from auths import Auth
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from itsdangerous import URLSafeTimedSerializer
 
 
 app = Flask(__name__)
@@ -100,32 +99,7 @@ def get():
         return jsonify(utils.success_response('请求成功',returnUser))
     return jsonify(response)
 
-@app.route('/confirm/<token>')
-def confirm_email(token):
-    try:
-        confirm_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
-    except:
-        # message = Markup(
-        #     "The confirmation link is invalid or has expired.")
-        # flash(message, 'danger')
-        return "连接失效"
 
-    user = Users.query.filter_by(email=email).first()
-
-    if user.email_confirmed:
-        # message = Markup(
-        #     "Account already confirmed. Please login.")
-        # flash(message, 'info')
-        return "已确认，请登陆"
-    else:
-        user.email_confirmed = True
-        db.session.add(user)
-        db.session.commit()
-        # message = Markup(
-        #     "Thank you for confirming your email address!")
-        # flash(message, 'success')
-    return '确认成功'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

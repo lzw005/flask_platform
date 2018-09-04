@@ -1,20 +1,29 @@
-import datetime
+import datetime,re
 from exts import db
 from sqlalchemy.exc import SQLAlchemyError
+
 
 
 class Users(db.Model):
     __tablename__ = 'wushu_users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250),  unique=True, nullable=False)
-    username = db.Column(db.String(250),  unique=True, nullable=False)
-    password = db.Column(db.String(250))
+    email = db.Column(db.String(30),  unique=True, nullable=False)
+    name = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(64), nullable=False)
+    duty = db.Column(db.String(20), nullable=False)
+    telephone = db.Column(db.String(20), nullable=False)
+    mobile_phone = db.Column(db.String(20), nullable=False)
+    school_name = db.Column(db.String(30), nullable=False)
+    school_type = db.Column(db.String(20), nullable=False)
+    identification_type = db.Column(db.String(20), nullable=False)
+    identification_num = db.Column(db.String(30), nullable=False)
+    provinceid = db.Column(db.Integer)
+    cityid = db.Column(db.Integer)
+    districtid = db.Column(db.Integer)
+    remark = db.Column(db.String(300))
+
     login_time = db.Column(db.Integer)
     email_confirmed = db.Column(db.Boolean)
-    def __init__(self, username, password, email):
-        self.username = username
-        self.password = password
-        self.email = email
 
     def __str__(self):
         return "Users(id='%s')" % self.id
@@ -45,6 +54,13 @@ class Users(db.Model):
     def is_email_confirmed(self):
         """Return True if the user confirmed their email address."""
         return self.email_confirmed
+
+    def validate_email(self, email):
+        if not re.match(r'^[0-9a-zA-Z\_]+@[0-9a-zA-Z\.]+$',email):
+            return False,'邮箱有误'
+        if Users.query.filter_by(email=email).first():
+            return False,'邮箱已被注册'
+        return True,'邮箱有效'
 
 
 def session_commit():
