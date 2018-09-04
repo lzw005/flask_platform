@@ -60,7 +60,7 @@ class Users(db.Model):
             return False,'邮箱有误'
         if Users.query.filter_by(email=email).first():
             return False,'邮箱已被注册'
-        return True,'邮箱有效'
+        return True,email
 
 
 def session_commit():

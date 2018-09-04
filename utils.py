@@ -19,7 +19,7 @@ def send_confirmation_email(user_email):
     confirm_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
 
     confirm_url = url_for(
-        'confirm_email',
+        'users.confirm_email',
         token = confirm_serializer.dumps(user_email, salt='email-confirmation-salt'),
         _external=True)
     print("url:",confirm_url)

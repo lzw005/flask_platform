@@ -36,6 +36,7 @@ def get_cities():
     return jsonify(cities_dict)
 
 @regions.route('/districts')
+@limiter.exempt
 def get_districts():
     """
     根据cityid获取districts
