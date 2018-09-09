@@ -24,6 +24,7 @@ class Users(db.Model):
 
     login_time = db.Column(db.Integer)
     email_confirmed = db.Column(db.Boolean)
+    teams = db.relationship('Teams', backref='owner')
 
     def __str__(self):
         return "Users(id='%s')" % self.id
@@ -88,9 +89,9 @@ class Teams(db.Model):
     pwx = db.Column(db.String(30), nullable = False)
     ptelephone = db.Column(db.String(20), nullable = False)
     pemail = db.Column(db.String(20), nullable = False)
-    date_posted = db.Column(db.DateTime, nullable = False)
-    def __init__(self, text):
-        self.date_posted = datetime.datetime.now()
+    deleted = db.Column(db.Boolean)
+
+    userid = db.Column(db.Integer, db.ForeignKey('wushu_users.id'))
 
 class Provinces(db.Model):
     __tablename__ = 'wushu_provinces'

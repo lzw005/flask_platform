@@ -55,14 +55,15 @@ app.register_blueprint(users_blueprint,url_prefix='/users')
 @app.route('/up', methods = ['POST','GET'])
 def up_photo():
     if request.method =="POST":
+        print(request.files.to_dict())
 
-        print(request.files)
-        img = request.files.get('photo')
-        path = basedir+"/static/"
-        file_path = path+img.filename
-        print(file_path)
-        img.save(file_path)
-        print ('上传头像成功，'+img.filename)
+        # print(request.files)
+        # img = request.files.get('photo')
+        # path = basedir+"/static/"
+        # file_path = path+img.filename
+        # print(file_path)
+        # img.save(file_path)
+        # print ('上传头像成功，'+img.filename)
         return "success"
     else:
         return render_template('image.html')

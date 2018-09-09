@@ -6,6 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from models import Users
 from auths import Auth
 from webtest import limiter
+from settings import Config as config
 
 users = Blueprint('users', __name__)
 
@@ -29,6 +30,7 @@ def register():
     用户注册
     :return: json
     """
+    print(request.form)
     validate_email = Users.validate_email(Users,request.form.get('email'))
     if not validate_email[0]:
         return jsonify(utils.error_response(validate_email[1]))
@@ -66,7 +68,7 @@ def confirm_email(token):
     :return: String
     '''
     try:
-        confirm_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        confirm_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
         email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
     except:
         # message = Markup(
@@ -89,3 +91,51 @@ def confirm_email(token):
         #     "Thank you for confirming your email address!")
         # flash(message, 'success')
     return '确认成功'
+
+
+@users.route('/reset', methods=["GET"])
+def reset():
+    email = request.args.get("email",None)
+    if email:
+        try:
+            user =Users.query.filter_by(email = email).first_or_404()
+        except:
+            return utils.error_response('邮箱无效')
+        if user.email_confirmed:
+            utils.send_password_reset_email(email)
+            return utils.success_response('邮件已发送至邮箱')
+        else:
+            return utils.error_response('请先进入邮箱确认')
+    else:
+        return utils.error_response('请输入邮箱')
+
+
+
+
+# @users.route('/reset/<token>', methods=["GET", "POST"])
+# def reset_with_token(token):
+#     try:
+#         password_reset_serializer = URLSafeTimedSerializer(config.SECRET_KEY)
+#         email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
+#     except:
+#         # message = Markup(
+#         #     "The password reset link is invalid or has expired.")
+#         # flash(message, 'danger')
+#         return '连接无效'
+#
+#     try:
+#         user = Users.query.filter_by(email=email).first_or_404()
+#     except:
+#         # message = Markup(
+#         #     "Invalid email address!")
+#         # flash(message, 'danger')
+#         return '无效邮箱'
+#
+#         user.password = form.password.data
+#         db.session.add(user)
+#         db.session.commit()
+#         message = Markup(
+#             "Your password has been updated!")
+#         flash(message, 'success')
+#         return redirect(url_for('users.login'))
+
